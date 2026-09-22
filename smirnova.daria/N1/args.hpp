@@ -1,5 +1,5 @@
-#ifndef SMIRNOVA_ARGS_HPP
-#define SMIRNOVA_ARGS_HPP
+#ifndef ARGS_HPP
+#define ARGS_HPP
 
 #include <string>
 

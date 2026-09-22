@@ -1,5 +1,5 @@
-#ifndef SMIRNOVA_TRANSACTION_HPP
-#define SMIRNOVA_TRANSACTION_HPP
+#ifndef TRANSACTION_HPP
+#define TRANSACTION_HPP
 
 #include <iostream>
 #include <string>

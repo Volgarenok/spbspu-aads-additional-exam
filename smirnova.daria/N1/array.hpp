@@ -1,5 +1,5 @@
-#ifndef SMIRNOVA_ARRAY_HPP
-#define SMIRNOVA_ARRAY_HPP
+#ifndef ARRAY_HPP
+#define ARRAY_HPP
 
 #include <cstddef>
 #include <cstdlib>
