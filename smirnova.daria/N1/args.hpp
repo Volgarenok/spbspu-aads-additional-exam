@@ -1,4 +1,6 @@
-#pragma once
+#ifndef SMIRNOVA_ARGS_HPP
+#define SMIRNOVA_ARGS_HPP
+
 #include <string>
 
 namespace smirnova {
@@ -11,3 +13,5 @@ namespace smirnova {
 
   int parse_args(const int argc, char* argv[], Args& args);
 }
+
+#endif
