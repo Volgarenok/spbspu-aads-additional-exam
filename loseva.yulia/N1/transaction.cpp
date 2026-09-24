@@ -11,11 +11,25 @@ void readTransactions(std::istream &in, DynamicArray<Transaction> &arr, ReadStat
   std::string line;
 
   while (std::getline(in, line)) {
+    if (line.empty()) {
+      continue;
+    }
+
     int raw_from = 0;
     int raw_to = 0;
     int val = 0;
     bool parsed_ok = true;
     std::size_t pos = 0;
+
+    try {
+      raw_from = std::stoi(line, &pos);
+      std::string rest1 = line.substr(pos);
+      raw_to = std::stoi(rest1, &pos);
+      std::string rest2 = rest1.substr(pos);
+      val = std::stoi(rest2, &pos);
+    } catch (...) {
+      parsed_ok = false;
+    }
 
     if (!parsed_ok) {
       stats.ignored_count_++;
@@ -30,9 +44,15 @@ void readTransactions(std::istream &in, DynamicArray<Transaction> &arr, ReadStat
       continue;
     }
 
+    Transaction t;
+    t.from_ = abs_from;
+    t.to_ = abs_to;
+    t.value_ = val;
+
     pushBack(arr, t);
     stats.success_count_++;
   }
 }
 
 }
+
