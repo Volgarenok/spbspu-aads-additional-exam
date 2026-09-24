@@ -1,12 +1,21 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include "dynamic_array.hpp"
 #include "transaction.hpp"
+
+namespace {
+constexpr int EXIT_INVALID_ARGS = 1;
+constexpr int EXIT_FILE_ERROR = 2;
+constexpr int MAX_CLI_ARGS = 3;
+constexpr std::size_t IN_PREFIX_LEN = 3;
+constexpr std::size_t OUT_PREFIX_LEN = 4;
+}
 
 int main(const int argc, const char * const argv[])
 {
-  if (argc > 3) {
-    return 1;
+  if (argc > MAX_CLI_ARGS) {
+    return EXIT_INVALID_ARGS;
   }
 
   std::string in_filename;
@@ -16,49 +25,50 @@ int main(const int argc, const char * const argv[])
 
   for (int i = 1; i < argc; ++i) {
     const std::string arg(argv[i]);
-    if (arg.substr(0, 3) == "in:") {
+    if (arg.substr(0, IN_PREFIX_LEN) == "in:") {
       if (has_in) {
-        return 1;
+        return EXIT_INVALID_ARGS;
       }
-      in_filename = arg.substr(3);
+      in_filename = arg.substr(IN_PREFIX_LEN);
       has_in = true;
-    } else if (arg.substr(0, 4) == "out:") {
+    } else if (arg.substr(0, OUT_PREFIX_LEN) == "out:") {
       if (has_out) {
-        return 1;
+        return EXIT_INVALID_ARGS;
       }
-      out_filename = arg.substr(4);
+      out_filename = arg.substr(OUT_PREFIX_LEN);
       has_out = true;
     } else {
-      return 1;
+      return EXIT_INVALID_ARGS;
     }
   }
-
-  std::ifstream file_in;
-  if (has_in) {
-    file_in.open(in_filename);
-    if (!file_in.is_open()) {
-      return 2;
-    }
-  }
-  std::istream &input_stream = has_in ? file_in : std::cin;
-
-  std::ofstream file_out;
-  if (has_out) {
-    file_out.open(out_filename);
-    if (!file_out.is_open()) {
-      return 2;
-    }
-  }
-  std::ostream &output_stream = has_out ? file_out : std::cout;
 
   loseva::DynamicArray<loseva::Transaction> transactions;
   loseva::initArray(transactions);
+  loseva::ReadStats stats{0, 0};
 
-  loseva::ReadStats stats;
-  loseva::readTransactions(input_stream, transactions, stats);
+  if (has_in) {
+    std::ifstream file_in(in_filename);
+    if (!file_in.is_open()) {
+      loseva::freeArray(transactions);
+      return EXIT_FILE_ERROR;
+    }
+    loseva::readTransactions(file_in, transactions, stats);
+  } else {
+    loseva::readTransactions(std::cin, transactions, stats);
+  }
 
-  loseva::printTransactions(output_stream, transactions);
-  std::cerr << stats.success_count_ << " " << stats.ignored_count_ << "\n";
+  if (has_out) {
+    std::ofstream file_out(out_filename);
+    if (!file_out.is_open()) {
+      loseva::freeArray(transactions);
+      return EXIT_FILE_ERROR;
+    }
+    loseva::printTransactions(file_out, transactions);
+  } else {
+    loseva::printTransactions(std::cout, transactions);
+  }
+
+  std::cerr << stats.success_count << " " << stats.ignored_count << "\n";
 
   loseva::freeArray(transactions);
   return 0;
