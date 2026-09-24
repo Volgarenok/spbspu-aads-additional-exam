@@ -19,6 +19,14 @@ void initArray(DinamicArray<T> &arr) {
   arr.size_ = 0;
 };
 
+template <typename T>
+void freeArray(DymanicArray<T> &arr) {
+  delete[] arr.data_;
+  arr.data_ = nullptr;
+  arr.capacity_ = 0;
+  arr.size_ = 0;
+}
+
 }
 
 #endif
