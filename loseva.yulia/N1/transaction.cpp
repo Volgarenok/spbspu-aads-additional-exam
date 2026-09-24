@@ -54,5 +54,14 @@ void readTransactions(std::istream &in, DynamicArray<Transaction> &arr, ReadStat
   }
 }
 
+void printTransactions(std::ostream &out, const DynamicArray<Transaction> &arr)
+{
+  for (std::size_t i = 0; i < arr.size_; ++i) {
+    out << arr.data_[i].from_ << " "
+        << arr.data_[i].to_ << " "
+        << arr.data_[i].value_ << "\n";
+  }
+}
+
 }
 
