@@ -18,10 +18,11 @@ bool readLine(T* line, int* from_ptr, int* to_ptr, int* value_ptr)
   }
 }
 
-int main(int argc, char* argv [])
+int main(/*int argc, char* argv []*/)
 {
   int from, to, value;
-  size_t succesful_records, ignored_records = 0;
+  size_t succesful_records;
+  size_t ignored_records = 0;
   std::string data;
   std::ifstream in ("input.txt");
   std::ofstream out ("output.txt");
@@ -30,7 +31,7 @@ int main(int argc, char* argv [])
     if(readLine(&in, &from, &to, &value) == true)
     {
       succesful_records++;
-      out << from << ' ' << to << ' ' << value << std::endl;
+      out << from << ' ' << to << ' ' << value << '\n';
     }
     else
     {
