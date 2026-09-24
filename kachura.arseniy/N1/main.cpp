@@ -3,7 +3,7 @@
 #include <string>
 
 template<typename T>
-void readLine(T* line, int* from_ptr, int* to_ptr, int* value_ptr)
+bool readLine(T* line, int* from_ptr, int* to_ptr, int* value_ptr)
 {
   for(size_t i = 0; i < 3; i++)
   {
@@ -11,10 +11,6 @@ void readLine(T* line, int* from_ptr, int* to_ptr, int* value_ptr)
     *line >> *to_ptr;
     *line >> *value_ptr;
   }
-}
-
-bool checkAccount(int* from_ptr, int* to_ptr, int* value_ptr)
-{
   if(*from_ptr != *to_ptr)
   {
     return true;
@@ -28,17 +24,20 @@ bool checkAccount(int* from_ptr, int* to_ptr, int* value_ptr)
 int main(int argc, char* argv [])
 {
   int from, to, value;
-  to = 0;
-  value = 0;
-  size_t succesful_records, ignored_records;
+  size_t succesful_records, ignored_records = 0;
   std::string data;
   std::ifstream in ("input.txt");
   std::ofstream out ("output.txt");
-  readLine(&in, &from, &to, &value);
-  if(checkAccount(&from, &to, &value) == true)
+  if(readLine(&in, &from, &to, &value) == true)
   {
+    succesful_records++;
     out << from << ' ' << to << ' ' << value << '\n';
   }
+  else
+  {
+    ignored_records++;
+  }
+  std::cout << succesful_records << " " << ignored_records << '\n';
   in.close();
   out.close();
 }
