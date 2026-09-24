@@ -32,5 +32,35 @@ int main(const int argc, const char * const argv[])
       return 1;
     }
   }
+
+  std::ifstream file_in;
+  if (has_in) {
+    file_in.open(in_filename);
+    if (!file_in.is_open()) {
+      return 2;
+    }
+  }
+  std::istream &input_stream = has_in ? file_in : std::cin;
+
+  std::ofstream file_out;
+  if (has_out) {
+    file_out.open(out_filename);
+    if (!file_out.is_open()) {
+      return 2;
+    }
+  }
+  std::ostream &output_stream = has_out ? file_out : std::cout;
+
+  loseva::DynamicArray<loseva::Transaction> transactions;
+  loseva::initArray(transactions);
+
+  loseva::ReadStats stats;
+  loseva::readTransactions(input_stream, transactions, stats);
+
+  loseva::printTransactions(output_stream, transactions);
+  std::cerr << stats.success_count_ << " " << stats.ignored_count_ << "\n";
+
+  loseva::freeArray(transactions);
+  return 0;
 }
 
