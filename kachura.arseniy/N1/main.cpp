@@ -5,13 +5,10 @@
 template<typename T>
 bool readLine(T* line, int* from_ptr, int* to_ptr, int* value_ptr)
 {
-  for(size_t i = 0; i < 3; i++)
-  {
-    *line >> *from_ptr;
-    *line >> *to_ptr;
-    *line >> *value_ptr;
-  }
-  if(*from_ptr != *to_ptr)
+ *line >> *from_ptr;
+ *line >> *to_ptr;
+ *line >> *value_ptr;
+  if(*from_ptr != *to_ptr && !(line -> eof()))
   {
     return true;
   }
@@ -28,14 +25,20 @@ int main(int argc, char* argv [])
   std::string data;
   std::ifstream in ("input.txt");
   std::ofstream out ("output.txt");
-  if(readLine(&in, &from, &to, &value) == true)
+  while(!(in.eof()))
   {
-    succesful_records++;
-    out << from << ' ' << to << ' ' << value << '\n';
-  }
-  else
-  {
-    ignored_records++;
+    if(readLine(&in, &from, &to, &value) == true)
+    {
+      succesful_records++;
+      out << from << ' ' << to << ' ' << value << std::endl;
+    }
+    else
+    {
+      if(!(in.eof()))
+      {
+        ignored_records++;
+      }
+    }
   }
   std::cout << succesful_records << " " << ignored_records << '\n';
   in.close();
