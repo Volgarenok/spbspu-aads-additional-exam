@@ -1,20 +1,20 @@
 #include "transaction.hpp"
 #include <cmath>
+#include <cstddef>
+#include <istream>
+#include <ostream>
 #include <string>
+#include "dynamic_array.hpp"
 
 namespace loseva {
 
 void readTransactions(std::istream &in, DynamicArray<Transaction> &arr, ReadStats &stats)
 {
-  stats.success_count_ = 0;
-  stats.ignored_count_ = 0;
+  stats.success_count = 0;
+  stats.ignored_count = 0;
   std::string line;
 
   while (std::getline(in, line)) {
-    if (line.empty()) {
-      continue;
-    }
-
     int raw_from = 0;
     int raw_to = 0;
     int val = 0;
@@ -23,16 +23,16 @@ void readTransactions(std::istream &in, DynamicArray<Transaction> &arr, ReadStat
 
     try {
       raw_from = std::stoi(line, &pos);
-      std::string rest1 = line.substr(pos);
+      const std::string rest1 = line.substr(pos);
       raw_to = std::stoi(rest1, &pos);
-      std::string rest2 = rest1.substr(pos);
+      const std::string rest2 = rest1.substr(pos);
       val = std::stoi(rest2, &pos);
     } catch (...) {
       parsed_ok = false;
     }
 
     if (!parsed_ok) {
-      stats.ignored_count_++;
+      stats.ignored_count++;
       continue;
     }
 
@@ -40,26 +40,26 @@ void readTransactions(std::istream &in, DynamicArray<Transaction> &arr, ReadStat
     const int abs_to = std::abs(raw_to);
 
     if (abs_from == abs_to) {
-      stats.ignored_count_++;
+      stats.ignored_count++;
       continue;
     }
 
     Transaction t;
-    t.from_ = abs_from;
-    t.to_ = abs_to;
-    t.value_ = val;
+    t.from = abs_from;
+    t.to = abs_to;
+    t.value = val;
 
     pushBack(arr, t);
-    stats.success_count_++;
+    stats.success_count++;
   }
 }
 
 void printTransactions(std::ostream &out, const DynamicArray<Transaction> &arr)
 {
-  for (std::size_t i = 0; i < arr.size_; ++i) {
-    out << arr.data_[i].from_ << " "
-        << arr.data_[i].to_ << " "
-        << arr.data_[i].value_ << "\n";
+  for (std::size_t i = 0; i < arr.size; ++i) {
+    out << arr.data[i].from << " "
+        << arr.data[i].to << " "
+        << arr.data[i].value << "\n";
   }
 }
 
