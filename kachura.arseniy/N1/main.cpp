@@ -13,6 +13,18 @@ void readLine(T* line, int* from_ptr, int* to_ptr, int* value_ptr)
   }
 }
 
+bool checkAccount(int* from_ptr, int* to_ptr, int* value_ptr)
+{
+  if(*from_ptr != *to_ptr)
+  {
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
 int main(int argc, char* argv [])
 {
   int from, to, value;
@@ -23,7 +35,10 @@ int main(int argc, char* argv [])
   std::ifstream in ("input.txt");
   std::ofstream out ("output.txt");
   readLine(&in, &from, &to, &value);
-  out << from << ' ' << to << ' ' << value << '\n';
+  if(checkAccount(&from, &to, &value) == true)
+  {
+    out << from << ' ' << to << ' ' << value << '\n';
+  }
   in.close();
   out.close();
 }
