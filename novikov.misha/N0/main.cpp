@@ -1,7 +1,6 @@
 #include <iostream>
 
-int main()
-{
+int main() {
   std::cout << "novikov.misha" << '\n';
   return 0;
 }
