@@ -1,5 +1,5 @@
-#ifndef LOSEVA_DYNAMIC_ARRAY_HPP
-#define LOSEVA_DYNAMIC_ARRAY_HPP
+#ifndef DYNAMIC_ARRAY_HPP
+#define DYNAMIC_ARRAY_HPP
 
 #include <cstddef>
 
@@ -7,43 +7,44 @@ namespace loseva {
 
 template <typename T>
 struct DynamicArray {
-  T *data_;
-  std::size_t capacity_;
-  std::size_t size_;
+  T *data;
+  std::size_t capacity;
+  std::size_t size;
 };
 
 template <typename T>
 void initArray(DynamicArray<T> &arr)
 {
-  arr.data_ = nullptr;
-  arr.capacity_ = 0;
-  arr.size_ = 0;
+  arr.data = nullptr;
+  arr.capacity = 0;
+  arr.size = 0;
 }
 
 template <typename T>
 void freeArray(DynamicArray<T> &arr)
 {
-  delete[] arr.data_;
-  arr.data_ = nullptr;
-  arr.capacity_ = 0;
-  arr.size_ = 0;
+  delete[] arr.data;
+  arr.data = nullptr;
+  arr.capacity = 0;
+  arr.size = 0;
 }
 
 template <typename T>
 void pushBack(DynamicArray<T> &arr, const T &value)
 {
-  if (arr.size_ >= arr.capacity_) {
-    const std::size_t new_cap = (arr.capacity_ == 0) ? 4 : (arr.capacity_ * 2);
-    T *new_data = new T[new_cap];
-    for (std::size_t i = 0; i < arr.size_; ++i) {
-      new_data[i] = arr.data_[i];
+  if (arr.size >= arr.capacity) {
+    const std::size_t default_cap = 4;
+    const std::size_t new_cap = (arr.capacity == 0) ? default_cap : (arr.capacity * 2);
+    T * const new_data = new T[new_cap];
+    for (std::size_t i = 0; i < arr.size; ++i) {
+      new_data[i] = arr.data[i];
     }
-    delete[] arr.data_;
-    arr.data_ = new_data;
-    arr.capacity_ = new_cap;
+    delete[] arr.data;
+    arr.data = new_data;
+    arr.capacity = new_cap;
   }
-  arr.data_[arr.size_] = value;
-  arr.size_++;
+  arr.data[arr.size] = value;
+  arr.size++;
 }
 
 }
