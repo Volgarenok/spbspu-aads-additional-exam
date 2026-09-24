@@ -2,21 +2,25 @@
 #include <fstream>
 #include <string>
 
-struct Transaction 
-{
-  static size_t succesful_records, ignored_records;
-  int from, to, value;
-};
-
 int main(int argc, char* argv [])
 {
-  std::string line;
+  int from, to, value;
+  size_t succesful_records, ignored_records;
+  std::string data;
   std::ifstream in ("input.txt");
-  std::ofstream out;
-  out.open("output.txt");
-  while(std::getline(in, line))
+  std::ofstream out ("output.txt");
+  for(size_t i = 0; in >> data; i++)
   {
-    out << line << std::endl;
+    out << data;
+    if (i == 2)
+    {
+      out << '\n';
+    }
+    else
+    {
+      out << ' ';
+    }
   }
+  in.close();
   out.close();
 }
